@@ -1,9 +1,6 @@
 #QQCH
 ## The first rule of QQCH is you don't talk about QQCH
 
-`#define design ===  visual medium`
-`#define architecture === internal design`
-
 ### Core Elements
 - JavaScript/HTML5
 - 2D platformer/scroller
@@ -45,22 +42,93 @@
 
 ###characterObject
 - Saved as JSON
+- Saved in LocalStorage
 
-```JSON
+```JavaScript
 {
 	"name": "TrevorStarick",
+	"prefix": "Über",
 	"class": "Wizard",
 	"level": 51,
-	"items": {
-		"1": 0x0010234,
-		...
-		"0": 0x7feadff,
-		"box":[
-			0xdeadbeef,
-			0x0ff0f0f0,
-			0xwhatever
-		]
-	},
-	"uuid": cee5ea80-0cac-11e4-9191-0800200c9a66
+	"items": [
+		0x1CEB00DA,
+		0x00BAB10C,
+		0xDEADBEEF,
+		0xFEE1DEAD,
+		0xBAADF00D
+	],
+	"uuid": "deadbeef-dead-beef-dead-beef00000075",
+	""
 }
+```
+
+###gameStructure
+
+- RequireJS/Browserify
+
+```
+.
+├── Gruntfile.js
+├── public
+│	├── index.html
+│	├── dist
+│	│   ├── dfjs.js
+│	│   └── dfjs.min.js
+│	├── gamefiles
+│	│	├── sounds
+│	│	│   ├── 00_main.ogg
+│	│	│   ├── 01_theme.ogg
+│	│	│   └── 99_ending.ogg
+│	│	└── images
+│	│	    ├── items.png
+│	│	    ├── armour.png
+│	│	    └── enviroment.png
+│	├── css
+│	│   ├── bootstrap-theme.min.css
+│	│   ├── bootstrap.min.css
+│	│   └── stylesheet.css
+│	├── fonts
+│	│   ├── glyphicons-halflings-regular.eot
+│	│   ├── glyphicons-halflings-regular.svg
+│	│   ├── glyphicons-halflings-regular.ttf
+│	│   └── glyphicons-halflings-regular.woff
+│	├── images
+│	│   ├── button_close.png
+│	│   ├── button_close_hover.png
+│	│   └── top-titlebar.png
+│	├── js
+│	│   ├── bootstrap.min.js
+│	│   ├── jquery.min.js
+│	│   ├── stats.min.js
+│	│   └── titlebar.js
+│	└── package.json
+│
+├──	lib
+│	├── main.js
+│	├── core
+│	│   ├── entities.js
+│	│   ├── game.js
+│	│   ├── map.js
+│	│   ├── physics.js
+│	│   └── seedrandom.js
+│	├── ai
+│	│	├── index.js
+│	│   └── pathfinding.js
+│	├── input
+│	│	├── index.js
+│	│   └── keybindings.js
+│	├── physics
+│	│   └── index.js
+│	└── sound
+│	    └── keypress.js
+├── build
+│	└── releases
+│		└──qqch
+│			├── windows
+│			│	└── *
+│			└── mac
+│				└── *
+└── node_modules
+	└── *
+
 ```
