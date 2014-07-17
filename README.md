@@ -7,6 +7,7 @@
 - Action/Adventure/RPG
 - Xbox controller primary
 - Mouse/Keyboard secondary
+- Chromecast cause why not
 - 1-4 player split screen
 - Characters sync to cloud service
 - Pseudo proceduraly generated/[herringbone](http://nothings.org/gamedev/herringbone/) map
