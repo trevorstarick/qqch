@@ -46,6 +46,22 @@ ctx.webkitImageSmoothingEnabled = false;
 ctx.mozImageSmoothingEnabled = false;
 ctx.oImageSmoothingEnabled = false;
 
+var backgroundCanvas = document.getElementById("background");
+backgroundCanvas.width = 640;
+backgroundCanvas.height = 400;
+
+var backgroundCtx = backgroundCanvas.getContext("2d");
+
+function drawBackground() {
+  var img = new Image();
+  img.src = 'lead_large.jpg';
+  img.onload = function() {
+    backgroundCtx.drawImage(img, 0, 0);
+  };
+}
+
+drawBackground();
+
 canvas.oncontextmenu = function(e) {
   e.preventDefault();
 };
