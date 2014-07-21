@@ -173,13 +173,20 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
       }
     },
     jump: function() {
-      var self = Player;
-      self.y -= size;
-      self.jumping = true;
-      setTimeout(function() {
-        Movement.fall();
-        Player.jumping = false;
-      }, 100);
+      var y = Math.floor(Player.y / 8) - 1;
+
+      var left = !Map.array[Math.floor((Player.x - 1) / 8) + 1][y];
+      var right = !Map.array[Math.floor(Player.x / 8)][y];
+
+      if (left && right) {
+        var self = Player;
+        self.y -= size;
+        self.jumping = true;
+        setTimeout(function() {
+          Movement.fall();
+          Player.jumping = false;
+        }, 100);
+      }
     },
     fall: function() {
       var y = Math.floor(Player.y / 8) + 1;
