@@ -2,7 +2,7 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
 
 (function() {
   var size = 8,
-    speed = 4,
+    speed = 2,
     fps = 60,
     width = 640,
     height = 360;
@@ -11,6 +11,19 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     then = Date.now(),
     interval = 1000 / fps,
     delta;
+
+  var Player = {
+    x: 4 * size,
+    y: 40 * size,
+    xIncr: 0,
+    yIncr: 0,
+    height: -size, // To start the player bottom left;
+    width: size,
+    jumping: false,
+    coordinates: function() {
+      return [this.x, this.y];
+    }
+  };
 
   var meter = new FPSMeter({
     interval: 100, // Update interval in milliseconds.
@@ -93,21 +106,11 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     "keys": "s",
     "on_keydown": function() {
       Player.height = Player.height / 2;
+      Player.crouching = true;
     },
     "on_keyup": function() {
       Player.height = -size;
-    },
-    "prevent_repeat": true
-  }, {
-    "keys": "down",
-    "on_keydown": function() {
-      Player.y += size;
-    },
-    "prevent_repeat": true
-  }, {
-    "keys": "up",
-    "on_keydown": function() {
-      Player.y -= size;
+      Player.crouching = false;
     },
     "prevent_repeat": true
   }];
@@ -137,19 +140,6 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     Movement.move(x, y);
   };
 
-  var Player = {
-    x: 0,
-    y: 0,
-    xIncr: 0,
-    yIncr: 0,
-    height: -size, // To start the player bottom left;
-    width: size,
-    jumping: false,
-    coordinates: function() {
-      return [this.x, this.y];
-    }
-  };
-
   var Movement = function(config) {};
   Movement.prototype = {
     move: function(x, y) {
@@ -158,17 +148,18 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
         Player.x = x;
         Player.y = y;
       } else {
-        this.collision();
-      }
-    },
-    collision: function() {
-      var xFutr = Player.x + (Player.xIncr * speed);
-      var yFutr = Player.y + Player.yIncr;
+        var _speed = speed;
+        if (Player.crouching) {
+          _speed = _speed * (2 / 5);
+        }
+        var xFutr = Player.x + (Player.xIncr * _speed);
+        var yFutr = Player.y + Player.yIncr;
 
-      if (0 <= xFutr && xFutr <= width - size) {
-        if (!Map.array[Math.ceil(xFutr / 8)][yFutr / 8] && !Map.array[Math.floor(xFutr / 8)][yFutr / 8]) {
-          Player.x = xFutr;
-          Player.y = yFutr;
+        if (0 <= xFutr && xFutr <= width - size) {
+          if (!Map.array[Math.ceil(xFutr / 8)][yFutr / 8] && !Map.array[Math.floor(xFutr / 8)][yFutr / 8]) {
+            Player.x = xFutr;
+            Player.y = yFutr;
+          }
         }
       }
     },
