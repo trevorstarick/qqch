@@ -39,20 +39,20 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
   });
 
   var canvas = document.getElementById("game");
-  canvas.width = 640;
-  canvas.height = 400;
-
-  var ctx = canvas.getContext("2d");
-  ctx.imageSmoothingEnabled = false;
-  ctx.webkitImageSmoothingEnabled = false;
-  ctx.mozImageSmoothingEnabled = false;
-  ctx.oImageSmoothingEnabled = false;
-
   var backgroundCanvas = document.getElementById("background");
-  backgroundCanvas.width = 640;
-  backgroundCanvas.height = 400;
+  var entitiesCanvas = document.getElementById("entities");
 
+  canvas.height = height;
+  backgroundCanvas.height = height;
+  entitiesCanvas.height = height;
+
+  canvas.width = width;
+  backgroundCanvas.width = width;
+  entitiesCanvas.width = width;
+
+  var mainCtx = canvas.getContext("2d");
   var backgroundCtx = backgroundCanvas.getContext("2d");
+  var entitiesCtx = entitiesCanvas.getContext("2d");
 
   function drawBackground() {
     var img = new Image();
