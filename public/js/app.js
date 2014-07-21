@@ -62,6 +62,9 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     };
   }
   drawBackground();
+  mainCtx.imageSmoothingEnabled = false;
+  backgroundCtx.imageSmoothingEnabled = false;
+  entitiesCtx.imageSmoothingEnabled = false;
 
   var keycombos = [{
     "keys": "a",
