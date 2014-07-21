@@ -222,9 +222,20 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     }
   };
 
-  var Physics = function(config) {};
+  var Physics = function(config) {
+    this.nextTick = false;
+  };
   Physics.prototype = {
-    gravity: function() {}
+    gravity: function() {
+      var coordinates = Player.coordinates();
+      if (coordinates[1] <= height - 1 && !Player.jumping) {
+        if (this.nextTick) {
+          Movement.fall();
+        } else {
+          this.nextTick = true;
+        }
+      }
+    }
   };
 
   var Map = function() {};
