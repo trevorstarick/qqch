@@ -196,20 +196,29 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
   };
 
   var Entities = function(config) {
-    types = {
+    this.types = {
       me: {}, // Self player
-      player: {} // Other players
+      player: {}, // Other players
+      block: {}
     };
+    this.index = {};
   };
   Entities.prototype = {
     init: function() {
       // Alloc memory
     },
     spawn: function(type, options) {
-      if (type === 'me') {
-        Player.x = 1 * size;
-        Player.y = canvas.height;
-      }
+      options.coordinates = options.coordinates.map(function(num) {
+        return Math.floor(num / 8);
+      });
+
+      console.log(options);
+
+      var x = options.coordinates[0];
+      var y = options.coordinates[1];
+
+      Map.array[x][y] = options.id;
+      Entities.index[options.id] = options;
     }
   };
 
