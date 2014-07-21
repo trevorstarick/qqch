@@ -4,12 +4,13 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
   var size = 8,
     speed = 4,
     fps = 60,
-    now,
-    then = Date.now(),
-    interval = 1000 / fps,
-    delta,
     width = 640,
     height = 360;
+
+  var now,
+    then = Date.now(),
+    interval = 1000 / fps,
+    delta;
 
   var meter = new FPSMeter({
     interval: 100, // Update interval in milliseconds.
