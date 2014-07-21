@@ -38,34 +38,31 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     history: 25 // How many history states to show in a graph.
   });
 
-  var canvas = document.getElementById("game");
-  var backgroundCanvas = document.getElementById("background");
-  var entitiesCanvas = document.getElementById("entities");
+  /** 
+   * Canvas constructor
+   * @constructor
+   */
+  var Canvas = {};
+  var $canvas = $('canvas');
 
-  canvas.height = height;
-  backgroundCanvas.height = height;
-  entitiesCanvas.height = height;
+  for (var i = 0; i < $canvas.length; i++) {
+    var id = $canvas[i].id;
 
-  canvas.width = width;
-  backgroundCanvas.width = width;
-  entitiesCanvas.width = width;
-
-  var mainCtx = canvas.getContext("2d");
-  var backgroundCtx = backgroundCanvas.getContext("2d");
-  var entitiesCtx = entitiesCanvas.getContext("2d");
+    Canvas[id] = document.getElementById(id);
+    Canvas[id].height = height;
+    Canvas[id].width = width;
+    Canvas[id + 'Ctx'] = Canvas[id].getContext('2d');
+    Canvas[id + 'Ctx'].imageSmoothingEnabled = false;
+  }
 
   function drawBackground() {
     var img = new Image();
     // img.src = 'lead_large.jpg';
     img.onload = function() {
-      backgroundCtx.drawImage(img, 0, 0);
+      Canvas.backgroundCtx.drawImage(img, 0, 0);
     };
   }
   drawBackground();
-
-  mainCtx.imageSmoothingEnabled = false;
-  backgroundCtx.imageSmoothingEnabled = false;
-  entitiesCtx.imageSmoothingEnabled = false;
 
   var keycombos = [{
     "keys": "a",
@@ -114,10 +111,10 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     "prevent_repeat": true
   }];
 
-  canvas.addEventListener("click", function(e) {
+  Canvas.game.addEventListener("click", function(e) {
     e.preventDefault();
 
-    var rect = canvas.getBoundingClientRect();
+    var rect = Canvas.game.getBoundingClientRect();
     var x = e.clientX - rect.left;
     var y = Math.floor((e.clientY - rect.top) / 8) * 8;
     y += 8;
@@ -128,10 +125,10 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     });
   }, false);
 
-  canvas.oncontextmenu = function(e) {
+  Canvas.game.oncontextmenu = function(e) {
     e.preventDefault();
 
-    var rect = canvas.getBoundingClientRect();
+    var rect = Canvas.game.getBoundingClientRect();
     var x = Math.floor((e.clientX - rect.left) / 8) * 8;
     var y = Math.floor((e.clientY - rect.top) / 8) * 8;
     y += 8;
@@ -167,7 +164,7 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
       var xFutr = Player.x + (Player.xIncr * speed);
       var yFutr = Player.y + Player.yIncr;
 
-      if (0 <= xFutr && xFutr <= canvas.width - size) {
+      if (0 <= xFutr && xFutr <= width - size) {
         if (!Map.array[Math.ceil(xFutr / 8)][yFutr / 8] && !Map.array[Math.floor(xFutr / 8)][yFutr / 8]) {
           Player.x = xFutr;
           Player.y = yFutr;
@@ -278,17 +275,17 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
       console.log('Game initialized...');
     },
     draw: function() {
-      mainCtx.clearRect(0, 0, canvas.width, canvas.height);
-      mainCtx.fillStyle = "rgba(255,255, 255, 1)";
-      mainCtx.fillRect(Player.x, Player.y, Player.width, Player.height);
+      Canvas.gameCtx.clearRect(0, 0, width, height);
+      Canvas.gameCtx.fillStyle = "rgba(255,255, 255, 1)";
+      Canvas.gameCtx.fillRect(Player.x, Player.y, Player.width, Player.height);
 
       for (var each in Entities.index) {
         var data = Entities.index[each];
         var x = data.coordinates[0];
         var y = data.coordinates[1];
 
-        entitiesCtx.fillStyle = "rgba(255,0, 255, 1)";
-        entitiesCtx.fillRect(x * size, (y - 1) * size, size, size);
+        Canvas.entitiesCtx.fillStyle = "rgba(255,0, 255, 1)";
+        Canvas.entitiesCtx.fillRect(x * size, (y - 1) * size, size, size);
       }
     },
     run: function() {
