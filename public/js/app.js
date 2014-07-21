@@ -140,12 +140,16 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
   };
 
   var Player = {
-    x: -1,
-    y: -1,
+    x: 0,
+    y: 0,
     xIncr: 0,
     yIncr: 0,
     height: -size, // To start the player bottom left;
-    width: size
+    width: size,
+    jumping: false,
+    coordinates: function() {
+      return [this.x, this.y];
+    }
   };
 
   var Movement = function(config) {
