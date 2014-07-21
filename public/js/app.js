@@ -62,6 +62,7 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     };
   }
   drawBackground();
+
   mainCtx.imageSmoothingEnabled = false;
   backgroundCtx.imageSmoothingEnabled = false;
   entitiesCtx.imageSmoothingEnabled = false;
@@ -113,8 +114,29 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     "prevent_repeat": true
   }];
 
+  canvas.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    var rect = canvas.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = Math.floor((e.clientY - rect.top) / 8) * 8;
+    y += 8;
+
+    Entities.spawn('block', {
+      coordinates: [x, y],
+      id: Object.keys(Entities.index).length + 1
+    });
+  }, false);
+
   canvas.oncontextmenu = function(e) {
     e.preventDefault();
+
+    var rect = canvas.getBoundingClientRect();
+    var x = Math.floor((e.clientX - rect.left) / 8) * 8;
+    var y = Math.floor((e.clientY - rect.top) / 8) * 8;
+    y += 8;
+
+    Movement.move(x, y);
   };
 
   var Player = {
