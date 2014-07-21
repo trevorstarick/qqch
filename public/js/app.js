@@ -7,7 +7,9 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     now,
     then = Date.now(),
     interval = 1000 / fps,
-    delta;
+    delta,
+    width = 640,
+    height = 360;
 
   var meter = new FPSMeter({
     interval: 100, // Update interval in milliseconds.
