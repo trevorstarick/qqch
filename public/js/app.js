@@ -255,59 +255,41 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
   };
 
   var Game = function(config) {
-    initialized = false;
-    paused = false;
+    this.initialized = false;
+    this.paused = false;
 
-    players = 1;
+    this.players = 1;
 
-    Entities = new Entities();
+    Map = new Map();
     Movement = new Movement();
+    Entities = new Entities();
+    Physics = new Physics();
   };
   Game.prototype = {
-
     init: function() {
       var listener = new window.keypress.Listener();
       listener.register_many(keycombos);
       console.log('Keys bound...');
 
-      Entities.spawn('me');
-      for (var i = 0; i < this.players; i++) {
-        Entities.spawn('players', i);
-      }
-      console.log('Spawned ' + i + ' players...');
-
+      Map.init();
+      console.log('Initialized map...');
       this.initialized = true;
 
       console.log('Game initialized...');
     },
     draw: function() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(255,255, 255, 1)";
-      ctx.fillRect(Player.x, Player.y, Player.width, Player.height);
-    },
-    togglePaused: function() {
-      if (this.paused) {
-        this.resume();
-      } else {
-        this.pause();
+      mainCtx.clearRect(0, 0, canvas.width, canvas.height);
+      mainCtx.fillStyle = "rgba(255,255, 255, 1)";
+      mainCtx.fillRect(Player.x, Player.y, Player.width, Player.height);
+
+      for (var each in Entities.index) {
+        var data = Entities.index[each];
+        var x = data.coordinates[0];
+        var y = data.coordinates[1];
+
+        entitiesCtx.fillStyle = "rgba(255,0, 255, 1)";
+        entitiesCtx.fillRect(x * size, (y - 1) * size, size, size);
       }
-    },
-    pause: function() {
-      this.paused = true;
-    },
-    resume: function() {
-      this.paused = false;
-    },
-    update: function() {
-      meter.tickStart();
-      (function listKeysPressed(e) {
-
-      })();
-      Movement.move();
-      meter.tick();
-    },
-    debug: function() {
-
     },
     run: function() {
       now = Date.now();
@@ -325,9 +307,16 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
         }
       }
       requestAnimationFrame(this.run.bind(this));
+    },
+    update: function() {
+      meter.tickStart();
+
+      Movement.move();
+      Physics.gravity();
+
+      meter.tick();
     }
   };
-
-  var qqch = new Game();
+  window.qqch = new Game();
   qqch.run();
 })();
