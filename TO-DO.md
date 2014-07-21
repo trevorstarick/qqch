@@ -1,16 +1,11 @@
 #To-Do
 
-- [ ] Input hooks
-- [ ] Collision detection
-- [ ] Seed based generation
-- [ ] [Saving via cookies](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage) (base64 [Object Game])
+- [x] Input hooks
+- [x] Collision detection
+- [ ] Saving via local storage
 - [ ] Audio
 - [ ] Scrolling map
-- [ ] NPC AI
-- [ ] Block range and frequency
-- [ ] Structure generation
 - [ ] [Browserify](http://browserify.org/) modularization
-- [ ] [A* pathfinding](https://github.com/qiao/PathFinding.js)
 - [ ] Node-Webkit
 - [ ] File formatting
 - [ ] Console based interaction

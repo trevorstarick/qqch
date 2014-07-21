@@ -5,7 +5,7 @@
 - JavaScript/HTML5
 - 2D platformer/scroller
 - Action/Adventure/RPG
-- Xbox controller primary
+- [Xbox controller](http://www.html5rocks.com/en/tutorials/doodles/gamepad/) primary
 - Mouse/Keyboard secondary
 - Chromecast cause why not
 - 1-4 player split screen
