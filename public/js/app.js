@@ -152,33 +152,46 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     }
   };
 
-  var Movement = function(config) {
-    moving = false;
-    inAir = false;
-    crouch = false;
-    direction = 0; // -1: Left; 0: Still; 1: Right
-  };
+  var Movement = function(config) {};
   Movement.prototype = {
-    left: function() {},
-    right: function() {},
-    crouch: function() {},
-    move: function() {
-      // console.log(0 <= this.x, this.x <= canvas.width);
-      var xFutr = Player.x + (Player.xIncr * speed);
-      var yFutr = Player.y + (Player.yIncr * speed);
-      if (0 <= xFutr && xFutr <= canvas.width - size) {
-        Player.x = xFutr;
+    move: function(x, y) {
+      if (x && y) {
+        console.log(x, y);
+        Player.x = x;
+        Player.y = y;
+      } else {
+        this.collision();
       }
-      if (0 <= yFutr && yFutr <= canvas.height - size) {
-        Player.y = yFutr;
+    },
+    collision: function() {
+      var xFutr = Player.x + (Player.xIncr * speed);
+      var yFutr = Player.y + Player.yIncr;
+
+      if (0 <= xFutr && xFutr <= canvas.width - size) {
+        if (!Map.array[Math.ceil(xFutr / 8)][yFutr / 8] && !Map.array[Math.floor(xFutr / 8)][yFutr / 8]) {
+          Player.x = xFutr;
+          Player.y = yFutr;
+        }
       }
     },
     jump: function() {
       var self = Player;
       self.y -= size;
+      self.jumping = true;
       setTimeout(function() {
-        self.y += size;
+        Movement.fall();
+        Player.jumping = false;
       }, 100);
+    },
+    fall: function() {
+      var y = Math.floor(Player.y / 8) + 1;
+
+      var left = !Map.array[Math.floor((Player.x - 1) / 8) + 1][y];
+      var right = !Map.array[Math.floor(Player.x / 8)][y];
+
+      if (left && right) {
+        Player.y += size;
+      }
     }
   };
 
