@@ -3,7 +3,7 @@ var Physics = function(config) {
 };
 Physics.prototype = {
   gravity: function() {
-    var coordinates = Player.coordinates();
+    var coordinates = Player.getCoordinates();
     if (coordinates[1] <= height - 1 && !Player.jumping) {
       if (this.nextTick) {
         Movement.fall();

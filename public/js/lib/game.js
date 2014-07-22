@@ -2,28 +2,33 @@ var Game = function(config) {
   this.gamepads = true;
   this.initialized = false;
   this.paused = false;
-
   this.players = 1;
 };
 
 Game.prototype = {
   init: function() {
-    var listener = new window.keypress.Listener();
-    listener.register_many(keycombos);
-    console.log('Keys bound...');
-
     Map.init();
     console.log('Initialized map...');
+
+    Input.init();
 
     window.addEventListener("gamepadconnected", function(e) {
       console.log('gamepadconnected', e);
       Game.gamepads = true;
     });
-
     window.addEventListener("gamepaddisconnected", function(e) {
       console.log('gamepaddisconnected', e);
       Game.gamepads = false;
     });
+
+    document.addEventListener("keydown", function(e) {
+      // console.log('keydown', e);
+      Input.keydown(e);
+    }, false);
+    document.addEventListener("keyup", function(e) {
+      // console.log('keyup', e);
+      Input.keyup(e);
+    }, false);
 
     this.initialized = true;
     console.log('Game initialized...');
@@ -57,13 +62,21 @@ Game.prototype = {
         this.draw();
       }
     }
+
     requestAnimationFrame(this.run.bind(this));
+  },
+  pause: function() {
+    this.paused = true;
+  },
+  resume: function() {
+    this.paused = false;
   },
   update: function() {
     meter.tickStart();
 
-    Movement.move();
+    Movement.pollLocation();
     Physics.gravity();
+    Input.pollKeyboardInput();
     Input.pollGamepads();
 
     // console.log(Input.gamepads.length);
