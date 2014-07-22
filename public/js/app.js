@@ -69,6 +69,31 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     Canvas[id + 'Ctx'].imageSmoothingEnabled = false;
   }
 
+  Canvas.game.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    var rect = Canvas.game.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = Math.floor((e.clientY - rect.top) / 8) * 8;
+    y += 8;
+
+    Entities.spawn('block', {
+      coordinates: [x, y],
+      id: Object.keys(Entities.index).length + 1
+    });
+  }, false);
+
+  Canvas.game.oncontextmenu = function(e) {
+    e.preventDefault();
+
+    var rect = Canvas.game.getBoundingClientRect();
+    var x = Math.floor((e.clientX - rect.left) / 8) * 8;
+    var y = Math.floor((e.clientY - rect.top) / 8) * 8;
+    y += 8;
+
+    Movement.move(x, y);
+  };
+
   function drawBackground() {
     var img = new Image();
     // img.src = 'lead_large.jpg';
@@ -115,30 +140,6 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
     "prevent_repeat": true
   }];
 
-  Canvas.game.addEventListener("click", function(e) {
-    e.preventDefault();
-
-    var rect = Canvas.game.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = Math.floor((e.clientY - rect.top) / 8) * 8;
-    y += 8;
-
-    Entities.spawn('block', {
-      coordinates: [x, y],
-      id: Object.keys(Entities.index).length + 1
-    });
-  }, false);
-
-  Canvas.game.oncontextmenu = function(e) {
-    e.preventDefault();
-
-    var rect = Canvas.game.getBoundingClientRect();
-    var x = Math.floor((e.clientX - rect.left) / 8) * 8;
-    var y = Math.floor((e.clientY - rect.top) / 8) * 8;
-    y += 8;
-
-    Movement.move(x, y);
-  };
 
   var Input = function(config) {
     this.gamepads = [];
