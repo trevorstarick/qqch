@@ -2,8 +2,41 @@ var Input = function(config) {
   this.gamepads = [];
   this.axes = [];
   this.buttons = [];
+  this.keys = {};
+
+  this.keybindings = {
+    65: function() {
+      Movement.move('left');
+    },
+    68: function() {
+      Movement.move('right');
+    },
+    32: function() {
+      Movement.jump();
+    },
+    83: function() {
+      Movement.crouch();
+    }
+  };
 };
 Input.prototype = {
+  init: function() {},
+  keydown: function(e) {
+    var key = e.key || e.keyCode;
+    this.keys[key] = true;
+  },
+  keyup: function(e) {
+    var key = e.key || e.keyCode;
+    delete this.keys[key];
+  },
+  pollKeyboardInput: function() {
+    for (var key in this.keys) {
+      key = +key;
+      if (this.keybindings[key]) {
+        this.keybindings[key].call();
+      }
+    }
+  },
   pollGamepadInput: function() {
     var gp = this.gamepads[0];
 
@@ -39,8 +72,7 @@ Input.prototype = {
         }
         if (buttons[1] && !Player.crouching) {
           console.log('crouch');
-          Player.height = Player.height / 2;
-          Player.crouching = true;
+          Movement.crouch();
         }
         console.log(this.buttons[1], buttons[1]);
         if (this.buttons[1] === 1 && buttons[1] === 0) {

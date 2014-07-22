@@ -112,42 +112,6 @@ function drawBackground() {
 }
 drawBackground();
 
-keycombos = [{
-  "keys": "a",
-  "on_keydown": function() {
-    Player.xIncr -= 1;
-  },
-  "on_keyup": function() {
-    Player.xIncr = 0;
-  },
-  "prevent_repeat": true,
-}, {
-  "keys": "d",
-  "on_keydown": function() {
-    Player.xIncr += 1;
-  },
-  "on_keyup": function() {
-    Player.xIncr = 0;
-  },
-  "prevent_repeat": true,
-}, {
-  "keys": "space",
-  "on_keydown": function() {
-    return Movement.jump();
-  },
-  "prevent_repeat": true
-}, {
-  "keys": "s",
-  "on_keydown": function() {
-    Player.height = Player.height / 2;
-    Player.crouching = true;
-  },
-  "on_keyup": function() {
-    Player.height = -size;
-    Player.crouching = false;
-  },
-  "prevent_repeat": true
-}];
-
+Game.init();
 Game.run();
 // })();
