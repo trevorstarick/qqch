@@ -4,15 +4,11 @@ var Map = function() {
 
 Map.prototype = {
   init: function() {
-    this.array = new Array(width / 8);
-    for (i = 0; i < width / 8; i++) {
-      this.array[i] = new Array(height / 8);
+    this.array = new Array(width / size);
+    for (i = 0; i < width / size; i++) {
+      this.array[i] = new Array(height / size);
     }
-  },
-  update: function() {},
-  render: function() {},
-  slide: function(direction) {},
-  setViewport: function(height, width) {},
+  }
 };
 
 module.exports = new Map();

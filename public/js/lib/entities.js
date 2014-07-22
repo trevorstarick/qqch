@@ -7,12 +7,9 @@ var Entities = function(config) {
   this.index = {};
 };
 Entities.prototype = {
-  init: function() {
-    // Alloc memory
-  },
   spawn: function(type, options) {
     options.coordinates = options.coordinates.map(function(num) {
-      return Math.floor(num / 8);
+      return Math.floor(num / size);
     });
 
     console.log(options);
@@ -21,7 +18,7 @@ Entities.prototype = {
     var y = options.coordinates[1];
 
     Map.array[x][y] = options.id;
-    Entities.index[options.id] = options;
+    this.index[options.id] = options;
   }
 };
 

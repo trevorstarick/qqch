@@ -23,10 +23,13 @@ Player = {
   y: 40 * size,
   xIncr: 0,
   yIncr: 0,
-  height: -size, // To start the player bottom left;
+  // height: -3 * size,
+  // width: 2 * size,
+  height: -size,
   width: size,
   jumping: false,
-  coordinates: function() {
+  collision: {},
+  getCoordinates: function() {
     return [this.x, this.y];
   }
 };
@@ -80,8 +83,8 @@ Canvas.game.addEventListener("click", function(e) {
 
   var rect = Canvas.game.getBoundingClientRect();
   var x = e.clientX - rect.left;
-  var y = Math.floor((e.clientY - rect.top) / 8) * 8;
-  y += 8;
+  var y = Math.floor((e.clientY - rect.top) / size) * size;
+  y += size;
 
   Entities.spawn('block', {
     coordinates: [x, y],
@@ -93,11 +96,11 @@ Canvas.game.oncontextmenu = function(e) {
   e.preventDefault();
 
   var rect = Canvas.game.getBoundingClientRect();
-  var x = Math.floor((e.clientX - rect.left) / 8) * 8;
-  var y = Math.floor((e.clientY - rect.top) / 8) * 8;
-  y += 8;
+  var x = Math.floor((e.clientX - rect.left) / size) * size;
+  var y = Math.floor((e.clientY - rect.top) / size) * size;
+  y += size;
 
-  Movement.move(x, y);
+  Movement.set(x, y);
 };
 
 function drawBackground() {
