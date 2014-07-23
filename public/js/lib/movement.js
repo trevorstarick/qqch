@@ -42,6 +42,9 @@ Movement.prototype = {
         whichBlocks.push(k);
         canMove = false;
       }
+    var falling = (y !== height) && !Map.array[directions.fall[0]][directions.fall[1]];
+    if (direction === 'jump' && falling) {
+      return false;
     }
     // console.log(canMove, whichBlocks);
     return canMove;
