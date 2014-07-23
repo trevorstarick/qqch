@@ -35,6 +35,13 @@ Movement.prototype = {
     var check = directions[direction];
 
     // console.log(direction, JSON.stringify(check));
+    if (direction === 'left' && Player.x - speed < 0) {
+      return false;
+    }
+
+    if (direction === 'right' && width < Player.x + Player.width + speed) {
+      return false;
+    }
 
     for (var i = 0; i < check.length; i++) {
       var k = check[i][0];
