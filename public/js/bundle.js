@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\app.js":[function(require,module,exports){
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 // (function() {
@@ -116,7 +116,7 @@ drawBackground();
 Game.init();
 Game.run();
 // })();
-},{"./entities.js":2,"./game.js":3,"./input.js":4,"./map.js":5,"./movement.js":6,"./physics.js":7}],2:[function(require,module,exports){
+},{"./entities.js":"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\entities.js","./game.js":"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\game.js","./input.js":"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\input.js","./map.js":"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\map.js","./movement.js":"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\movement.js","./physics.js":"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\physics.js"}],"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\entities.js":[function(require,module,exports){
 var Entities = function(config) {
   this.types = {
     me: {}, // Self player
@@ -142,7 +142,7 @@ Entities.prototype = {
 };
 
 module.exports = new Entities();
-},{}],3:[function(require,module,exports){
+},{}],"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\game.js":[function(require,module,exports){
 (function (global){
 var Game = function(config) {
   this.gamepads = true;
@@ -235,127 +235,127 @@ Game.prototype = {
 };
 
 global.Game = module.exports = new Game();
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],4:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\input.js":[function(require,module,exports){
 var Input = function(config) {
-  this.gamepads = [];
-  this.axes = [];
-  this.buttons = [];
-  this.keys = {};
-  this.repeat = {
-    65: function() {
-      Movement.move('left');
-    },
-    68: function() {
-      Movement.move('right');
-    }
-  };
-  this.single = {
-    32: function() {
-      Movement.jump();
-    }
-  };
-  this.toggle = {
-    83: function(status) {
-      Movement.crouch(status);
-    }
-  };
+    this.gamepads = [];
+    this.axes = [];
+    this.buttons = [];
+    this.keys = {};
+    this.repeat = {
+        65: function() {
+            Movement.move('left');
+        },
+        68: function() {
+            Movement.move('right');
+        }
+    };
+    this.single = {
+        32: function() {
+            Movement.jump();
+        }
+    };
+    this.toggle = {
+        83: function(status) {
+            Movement.crouch(status);
+        }
+    };
 };
+
 Input.prototype = {
-  init: function() {},
-  keydown: function(e) {
-    var key = e.key || e.keyCode;
-    if (this.single[key]) {
-      if (!this.keys[key]) {
-        this.single[key].call();
-      }
-    }
-
-    if (this.toggle[key]) {
-      if (!this.keys[key]) {
-        this.toggle[key]('down');
-      }
-    }
-
-    this.keys[key] = true;
-  },
-  keyup: function(e) {
-    var key = e.key || e.keyCode;
-
-    if (this.toggle[key]) {
-      this.toggle[key]('up');
-    }
-
-    delete this.keys[key];
-  },
-  pollKeyboardInput: function() {
-    for (var key in this.keys) {
-      key = +key;
-      // Repeats function
-      if (this.repeat[key]) {
-        this.repeat[key].call();
-      }
-    }
-  },
-  pollGamepadInput: function() {
-    var gp = this.gamepads[0];
-
-    if (gp) {
-      if (JSON.stringify(this.axes) !== JSON.stringify(gp.axes)) {
-        console.log(gp.axes);
-        if (gp.axes[0] < 0) {
-          console.log('left');
+    init: function() {},
+    keydown: function(e) {
+        var key = e.key || e.keyCode;
+        if (this.single[key]) {
+            if (!this.keys[key]) {
+                this.single[key].call();
+            }
         }
-        if (0 < gp.axes[0]) {
-          console.log('right');
-        }
-        Player.xIncr = gp.axes[0];
 
-        // if (gp.axes[1] < 0) {
-        //   console.log('up');
-        // }
-        // if (0 < gp.axes[1]) {
-        //   console.log('down');
-        // }
-      }
-      this.axes = gp.axes;
+        if (this.toggle[key]) {
+            if (!this.keys[key]) {
+                this.toggle[key]('down');
+            }
+        }
 
-      var buttons = [];
-      for (var button in gp.buttons) {
-        buttons.push(gp.buttons[button].value);
-      }
-      if (JSON.stringify(this.buttons) !== JSON.stringify(buttons)) {
-        console.log(buttons);
-        if (buttons[0]) {
-          console.log('jump');
-          Movement.jump();
+        this.keys[key] = true;
+    },
+    keyup: function(e) {
+        var key = e.key || e.keyCode;
+
+        if (this.toggle[key]) {
+            this.toggle[key]('up');
         }
-        if (buttons[1] && !Player.crouching) {
-          console.log('crouch');
-          Movement.crouch();
+
+        delete this.keys[key];
+    },
+    pollKeyboardInput: function() {
+        for (var key in this.keys) {
+            key = +key;
+            // Repeats function
+            if (this.repeat[key]) {
+                this.repeat[key].call();
+            }
         }
-        console.log(this.buttons[1], buttons[1]);
-        if (this.buttons[1] === 1 && buttons[1] === 0) {
-          console.log("/crouch");
-          Player.height = -size;
-          Player.crouching = false;
+    },
+    pollGamepadInput: function() {
+        var gp = this.gamepads[0];
+        var buttons = [];
+
+        if (gp) {
+            // if (JSON.stringify(this.axes) !== JSON.stringify(gp.axes)) {
+            //     console.log(gp.axes);
+            //     if (gp.axes[0] < 0) {
+            //         Movement.move('left');
+            //     }
+            //     if (0 < gp.axes[0]) {
+            //         Movement.move('right');
+            //     }
+            //     // Player.xIncr = gp.axes[0];
+
+            //     // if (gp.axes[1] < 0) {
+            //     //   console.log('up');
+            //     // }
+            //     // if (0 < gp.axes[1]) {
+            //     //   console.log('down');
+            //     // }
+            // }
+            // this.axes = gp.axes;
+
+            if (!this.buttons) {
+                this.buttons = buttons;
+            }
+
+            for (var button in gp.buttons) {
+                buttons.push(gp.buttons[button].value);
+            }
+
+            if (this.buttons[0] !== buttons[0]) {
+                Movement.jump();
+            }
+
+            if (this.buttons[1] !== buttons[1]) {
+                console.log(this.buttons[1], buttons[1])
+                // Movement.crouch('down');
+            }
+            if (this.buttons[1] === buttons[1]) {
+                // Movement.crouch('up');
+            }
         }
-      }
-      this.buttons = buttons;
+        this.buttons = buttons;
+    },
+    pollGamepads: function() {
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+        for (var i = 0; i < gamepads.length; i++) {
+            var gp = gamepads[i];
+            if (gp) {
+                this.gamepads = gamepads;
+            }
+        }
     }
-  },
-  pollGamepads: function() {
-    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-    for (var i = 0; i < gamepads.length; i++) {
-      var gp = gamepads[i];
-      if (gp) {
-        this.gamepads = gamepads;
-      }
-    }
-  }
 };
 module.exports = new Input();
-},{}],5:[function(require,module,exports){
+},{}],"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\map.js":[function(require,module,exports){
 var Map = function() {
   this.array = [];
 };
@@ -370,7 +370,7 @@ Map.prototype = {
 };
 
 module.exports = new Map();
-},{}],6:[function(require,module,exports){
+},{}],"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\movement.js":[function(require,module,exports){
 var Movement = function(config) {
   this.coordinates = [];
   this.direction = [];
@@ -471,7 +471,7 @@ Movement.prototype = {
 };
 
 module.exports = new Movement();
-},{}],7:[function(require,module,exports){
+},{}],"C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\physics.js":[function(require,module,exports){
 var Physics = function(config) {
   this.nextTick = false;
 };
@@ -489,4 +489,4 @@ Physics.prototype = {
 };
 
 module.exports = new Physics();
-},{}]},{},[1])
+},{}]},{},["C:\\Users\\Trevor Starick\\Documents\\GitHub\\qqch\\public\\js\\lib\\app.js"]);
