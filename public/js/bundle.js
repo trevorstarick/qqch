@@ -226,9 +226,7 @@ Game.prototype = {
     Input.pollGamepads();
 
     // console.log(Input.gamepads.length);
-    if (this.gamepads) {
-      Input.pollGamepadInput();
-    }
+    if (this.gamepads) Input.pollGamepadInput();
 
     meter.tick();
   }
@@ -266,16 +264,10 @@ Input.prototype = {
   init: function() {},
   keydown: function(e) {
     var key = e.key || e.keyCode;
-    if (this.single[key]) {
-      if (!this.keys[key]) {
-        this.single[key].call();
-      }
-    }
 
-    if (this.toggle[key]) {
-      if (!this.keys[key]) {
-        this.toggle[key]('down');
-      }
+    if (!this.keys[key]) {
+      if (this.single[key]) this.single[key].call();
+      if (this.toggle[key]) this.toggle[key]('down');
     }
 
     this.keys[key] = true;
@@ -283,19 +275,14 @@ Input.prototype = {
   keyup: function(e) {
     var key = e.key || e.keyCode;
 
-    if (this.toggle[key]) {
-      this.toggle[key]('up');
-    }
+    if (this.toggle[key]) this.toggle[key]('up');
 
     delete this.keys[key];
   },
   pollKeyboardInput: function() {
     for (var key in this.keys) {
       key = +key;
-      // Repeats function
-      if (this.repeat[key]) {
-        this.repeat[key].call();
-      }
+      if (this.repeat[key]) this.repeat[key].call();
     }
   },
   pollGamepadInput: function() {
@@ -303,26 +290,8 @@ Input.prototype = {
     var buttons = [];
 
     if (gp) {
-      if (JSON.stringify(this.axes) !== JSON.stringify(gp.axes)) {
-        console.log(gp.axes);
-        // Player.xIncr = gp.axes[0];
 
-        // if (gp.axes[1] < 0) {
-        //   console.log('up');
-        // }
-        // if (0 < gp.axes[1]) {
-        //   console.log('down');
-        // }
-      }
-
-      if (0 < gp.axes[0] || gp.axes[0] < 0) {
-        Movement.move(gp.axes[0]);
-      }
-
-      if (!this.buttons) {
-        this.buttons = buttons;
-      }
-
+      if (!this.buttons) this.buttons = buttons;
       for (var button in gp.buttons) {
         buttons.push(gp.buttons[button].value);
       }
@@ -331,32 +300,21 @@ Input.prototype = {
         // console.log(this.buttons);
       }
 
-      if (!this.buttons[0] && this.buttons[0] !== buttons[0]) {
-        Movement.jump();
-      }
+      if (0 < gp.axes[0] || gp.axes[0] < 0) Movement.move(gp.axes[0]);
+      if (!this.buttons[0] && this.buttons[0] !== buttons[0]) Movement.jump();
+      if (this.buttons[1] !== buttons[1]) Movement.crouch();
+      if (this.buttons[14]) Movement.move(-1);
+      if (this.buttons[15]) Movement.move(+1);
 
-      if (this.buttons[1] !== buttons[1]) {
-        Movement.crouch();
-      }
-
-      if (this.buttons[14]) {
-        Movement.move(-1);
-      }
-      if (this.buttons[15]) {
-        Movement.move(+1);
-      }
-
+      this.axes = gp.axes;
+      this.buttons = buttons;
     }
-    this.axes = gp.axes;
-    this.buttons = buttons;
   },
   pollGamepads: function() {
     var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     for (var i = 0; i < gamepads.length; i++) {
       var gp = gamepads[i];
-      if (gp) {
-        this.gamepads = gamepads;
-      }
+      if (gp) this.gamepads = gamepads;
     }
   }
 };
@@ -397,30 +355,31 @@ Movement.prototype = {
     }
 
     var directions = {
-      jump: [Math.round(x / 8), Math.floor((y + Player.height) / 8)],
-      fall: [Math.round(x / 8), Math.ceil((y - Player.height) / 8)],
-      left: [Math.floor((x + speed - size / 2) / 8), Math.round(y / 8)],
-      right: [Math.ceil(((x + Player.width - size / 2) - speed) / 8), Math.round(y / 8)],
+      jump: [
+        Math.round(x / 8),
+        Math.floor((y + Player.height) / 8)
+      ],
+      fall: [
+        Math.round(x / 8),
+        Math.ceil((y - Player.height) / 8)
+      ],
+      left: [
+        Math.floor((x + speed - size / 2) / 8),
+        Math.round(y / 8)
+      ],
+      right: [
+        Math.ceil(((x + Player.width - size / 2) - speed) / 8),
+        Math.round(y / 8)
+      ],
     };
 
     var check = directions[direction];
-
-    if (direction === 'left' && Player.x - speed < 0) {
-      return false;
-    }
-
-    if (direction === 'right' && width < Player.x + Player.width + speed) {
-      return false;
-    }
-
     var falling = (y !== height) && !Map.array[directions.fall[0]][directions.fall[1]];
-    if (direction === 'jump' && falling) {
-      return false;
-    }
 
-    if (Map.array[check[0]][check[1]]) {
-      return false;
-    }
+    if (direction === 'left' && Player.x - speed < 0) return false;
+    if (direction === 'right' && width < Player.x + Player.width + speed) return false;
+    if (direction === 'jump' && falling) return false;
+    if (Map.array[check[0]][check[1]]) return false;
 
     return true;
   },
@@ -436,9 +395,7 @@ Movement.prototype = {
     };
   },
   move: function(velocity) {
-    if (this.collisionCheck(velocity)) {
-      Player.x += velocity * speed;
-    }
+    if (this.collisionCheck(velocity)) Player.x += velocity * speed;
   },
   crouch: function() {
     // console.log('Crouching:', Player.crouching);
@@ -463,9 +420,7 @@ Movement.prototype = {
     }
   },
   fall: function() {
-    if (this.collisionCheck('fall')) {
-      Player.y += size;
-    }
+    if (this.collisionCheck('fall')) Player.y += size;
   }
 };
 

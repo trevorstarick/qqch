@@ -80,9 +80,7 @@ Game.prototype = {
     Input.pollGamepads();
 
     // console.log(Input.gamepads.length);
-    if (this.gamepads) {
-      Input.pollGamepadInput();
-    }
+    if (this.gamepads) Input.pollGamepadInput();
 
     meter.tick();
   }

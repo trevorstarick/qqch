@@ -18,30 +18,31 @@ Movement.prototype = {
     }
 
     var directions = {
-      jump: [Math.round(x / 8), Math.floor((y + Player.height) / 8)],
-      fall: [Math.round(x / 8), Math.ceil((y - Player.height) / 8)],
-      left: [Math.floor((x + speed - size / 2) / 8), Math.round(y / 8)],
-      right: [Math.ceil(((x + Player.width - size / 2) - speed) / 8), Math.round(y / 8)],
+      jump: [
+        Math.round(x / 8),
+        Math.floor((y + Player.height) / 8)
+      ],
+      fall: [
+        Math.round(x / 8),
+        Math.ceil((y - Player.height) / 8)
+      ],
+      left: [
+        Math.floor((x + speed - size / 2) / 8),
+        Math.round(y / 8)
+      ],
+      right: [
+        Math.ceil(((x + Player.width - size / 2) - speed) / 8),
+        Math.round(y / 8)
+      ],
     };
 
     var check = directions[direction];
-
-    if (direction === 'left' && Player.x - speed < 0) {
-      return false;
-    }
-
-    if (direction === 'right' && width < Player.x + Player.width + speed) {
-      return false;
-    }
-
     var falling = (y !== height) && !Map.array[directions.fall[0]][directions.fall[1]];
-    if (direction === 'jump' && falling) {
-      return false;
-    }
 
-    if (Map.array[check[0]][check[1]]) {
-      return false;
-    }
+    if (direction === 'left' && Player.x - speed < 0) return false;
+    if (direction === 'right' && width < Player.x + Player.width + speed) return false;
+    if (direction === 'jump' && falling) return false;
+    if (Map.array[check[0]][check[1]]) return false;
 
     return true;
   },
@@ -57,9 +58,7 @@ Movement.prototype = {
     };
   },
   move: function(velocity) {
-    if (this.collisionCheck(velocity)) {
-      Player.x += velocity * speed;
-    }
+    if (this.collisionCheck(velocity)) Player.x += velocity * speed;
   },
   crouch: function() {
     // console.log('Crouching:', Player.crouching);
@@ -84,9 +83,7 @@ Movement.prototype = {
     }
   },
   fall: function() {
-    if (this.collisionCheck('fall')) {
-      Player.y += size;
-    }
+    if (this.collisionCheck('fall')) Player.y += size;
   }
 };
 
