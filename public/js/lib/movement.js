@@ -9,6 +9,14 @@ Movement.prototype = {
     var x = Player.x;
     var y = Player.y;
 
+    if (typeof direction !== 'string') {
+      if (direction < 0) {
+        direction = 'left';
+      } else {
+        direction = 'right';
+      }
+    }
+
     var directions = {
       jump: [Math.round(x / 8), Math.floor((y + Player.height) / 8)],
       fall: [Math.round(x / 8), Math.ceil((y - Player.height) / 8)],
@@ -48,35 +56,20 @@ Movement.prototype = {
       right: Player.x + Player.width,
     };
   },
-  move: function(direction) {
-    if (this.collisionCheck(direction)) {
-      switch (direction) {
-        case "left":
-          Player.x -= 1 * speed;
-          break;
-        case "right":
-          Player.x += 1 * speed;
-          break;
-      }
+  move: function(velocity) {
+    if (this.collisionCheck(velocity)) {
+      Player.x += velocity * speed;
     }
   },
-  crouch: function(toggle) {
-    function down() {
-      Player.height = Player.height / 2;
-      Player.crouching = true;
-    }
+  crouch: function() {
+    // console.log('Crouching:', Player.crouching);
 
-    function up() {
-      Player.height = Player.height * 2;
+    if (Player.crouching) {
+      Player.height = Player.originalHeight / 2;
       Player.crouching = false;
-    }
-
-    if (toggle === 'down') {
-      down();
-    }
-
-    if (toggle === 'up') {
-      up();
+    } else if (!Player.crouching) {
+      Player.height = Player.originalHeight;
+      Player.crouching = true;
     }
   },
   jump: function() {

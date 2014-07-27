@@ -23,11 +23,11 @@ Player = {
   y: 40 * size,
   xIncr: 0,
   yIncr: 0,
-  // height: -3 * size,
-  // width: 2 * size,
+  originalHeight: -size,
   height: -size,
   width: size,
   jumping: false,
+  crouching: false,
   collision: {},
   getCoordinates: function() {
     return [this.x, this.y];
