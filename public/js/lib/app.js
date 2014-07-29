@@ -8,11 +8,12 @@ Map = require('./map.js');
 Physics = require('./physics.js');
 Movement = require('./movement.js');
 
-size = 8;
-speed = 2;
-fps = 60;
 width = 640;
 height = 360;
+size = 8;
+speed = 2;
+fallingSpeed = 8;
+fps = 60;
 then = Date.now();
 interval = 1000 / fps;
 now = '';

@@ -9,11 +9,12 @@ Map = require('./map.js');
 Physics = require('./physics.js');
 Movement = require('./movement.js');
 
-size = 8;
-speed = 2;
-fps = 60;
 width = 640;
 height = 360;
+size = 8;
+speed = 2;
+fallingSpeed = 8;
+fps = 60;
 then = Date.now();
 interval = 1000 / fps;
 now = '';
@@ -398,13 +399,13 @@ Movement.prototype = {
     if (this.collisionCheck(velocity)) Player.x += velocity * speed;
   },
   crouch: function() {
-    // console.log('Crouching:', Player.crouching);
+    console.log('Crouching:', Player.crouching);
 
     if (Player.crouching) {
-      Player.height = Player.originalHeight / 2;
+      Player.height = Player.originalHeight;
       Player.crouching = false;
     } else if (!Player.crouching) {
-      Player.height = Player.originalHeight;
+      Player.height = Player.originalHeight / 2;
       Player.crouching = true;
     }
   },
@@ -420,7 +421,9 @@ Movement.prototype = {
     }
   },
   fall: function() {
-    if (this.collisionCheck('fall')) Player.y += size;
+    if (this.collisionCheck('fall')) {
+      Player.y += fallingSpeed;
+    }
   }
 };
 
