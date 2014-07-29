@@ -61,13 +61,13 @@ Movement.prototype = {
     if (this.collisionCheck(velocity)) Player.x += velocity * speed;
   },
   crouch: function() {
-    // console.log('Crouching:', Player.crouching);
+    console.log('Crouching:', Player.crouching);
 
     if (Player.crouching) {
-      Player.height = Player.originalHeight / 2;
+      Player.height = Player.originalHeight;
       Player.crouching = false;
     } else if (!Player.crouching) {
-      Player.height = Player.originalHeight;
+      Player.height = Player.originalHeight / 2;
       Player.crouching = true;
     }
   },
@@ -83,7 +83,9 @@ Movement.prototype = {
     }
   },
   fall: function() {
-    if (this.collisionCheck('fall')) Player.y += size;
+    if (this.collisionCheck('fall')) {
+      Player.y += fallingSpeed;
+    }
   }
 };
 
